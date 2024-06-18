@@ -1,0 +1,34 @@
+import numpy as np
+
+# Функция для вычисления интерполяционного многочлена Лагранжа в точке x_interp
+def lagrange_interpolation(x, y, x_interp):
+    n = len(x)
+    result = 0.0
+    for i in range(n):
+        term = y[i]
+        for j in range(n):
+            if j != i:
+                term *= (x_interp - x[j]) / (x[i] - x[j])
+        result += term
+    return result
+
+# Заданные точки и значения функции
+x = np.array([0.1 * np.pi, 0.2 * np.pi, 0.3 * np.pi, 0.4 * np.pi])
+y = np.sin(x)
+
+# Точка, в которой нужно вычислить погрешность интерполяции
+x_star = 0.25 * np.pi
+
+# Вычисление значения интерполяционного многочлена Лагранжа в точке x_star
+interpolated_value = lagrange_interpolation(x, y, x_star)
+
+# Вычисление значения функции в точке x_star
+exact_value = np.sin(x_star)
+
+# Вычисление погрешности
+error = np.abs(exact_value - interpolated_value)
+
+# Вывод результатов
+print(f"Interpolated value at x* = {x_star}: {interpolated_value}")
+print(f"Exact value at x* = {x_star}: {exact_value}")
+print(f"Error Δ(y(x*)) = {error}")
