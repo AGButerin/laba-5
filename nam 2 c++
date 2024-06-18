@@ -1,0 +1,49 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+
+// Функция для вычисления интерполяционного многочлена Лагранжа в точке x_interp
+double lagrange_interpolation(std::vector<double>& x, std::vector<double>& y, double x_interp) {
+    double result = 0.0;
+    int n = x.size();
+
+    for (int i = 0; i < n; ++i) {
+        double term = y[i];
+        for (int j = 0; j < n; ++j) {
+            if (j != i) {
+                term *= (x_interp - x[j]) / (x[i] - x[j]);
+            }
+        }
+        result += term;
+    }
+
+    return result;
+}
+
+int main() {
+    // Даны узлы интерполяции и значения функции
+    std::vector<double> x = {0.1 * M_PI, 0.2 * M_PI, 0.3 * M_PI, 0.4 * M_PI};
+    std::vector<double> y;
+    for (double xi : x) {
+        y.push_back(sin(xi));
+    }
+
+    // Точка, в которой нужно вычислить погрешность интерполяции
+    double x_star = 0.25 * M_PI;
+
+    // Вычисление значения интерполяционного многочлена Лагранжа в точке x_star
+    double interpolated_value = lagrange_interpolation(x, y, x_star);
+
+    // Вычисление значения функции в точке x_star
+    double exact_value = sin(x_star);
+
+    // Вычисление погрешности
+    double error = std::abs(exact_value - interpolated_value);
+
+    // Вывод результатов
+    std::cout << "Interpolated value at x* = " << x_star << ": " << interpolated_value << std::endl;
+    std::cout << "Exact value at x* = " << x_star << ": " << exact_value << std::endl;
+    std::cout << "Error Δ(y(x*)) = " << error << std::endl;
+
+    return 0;
+}
